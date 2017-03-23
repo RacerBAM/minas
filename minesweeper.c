@@ -64,14 +64,29 @@ void colocarMinas(int filas, int columnas, tipoCasilla **matrix, int NumeroMinas
 	}
 }
 
-int procedimiento(tipoCasilla **matriz, int r, int c) {
+int procedimiento(tipoCasilla **matriz, int r, int c, int di) {
 
  // retorna 0 si toca una Mina y retorna 1 si toca un cuadro sin minas
  // si toca un cuadro sin minas, chequea las casillas adyacentes por minas
  // el numero de minas adyacentes sera el entero "b"
 
- int i = r, j = c, b = 0, k;
+ int i = r, j = c, b = 0, k, x, y;
  char C;
+	
+ if (di == 1) {
+	 x = 8;
+	 y = 8;
+}
+
+ if (di == 2) {
+	 x = 16;
+	 y = 16;
+ }
+	
+ if (di == 3) {
+	 x = 16;
+	 y = 30;
+ }
 
  if (matriz[i][j].tipo == 'M') {
    k = 0;
@@ -80,21 +95,21 @@ int procedimiento(tipoCasilla **matriz, int r, int c) {
 
  else {
 
-   if (matriz[i-1][j-1].tipo == 'M')
+   if ((i-1 > 0) && (j-1 > 0) && matriz[i-1][j-1].tipo == 'M')
    	b++;  
-   if   (matriz[i-1][j].tipo == 'M')
+   if ((i-1 > 0) && matriz[i-1][j].tipo == 'M')
     b++;  
-   if (matriz[i-1][j+1].tipo == 'M')
+   if ((i-1 > 0) && (j+1 < y) && matriz[i-1][j+1].tipo == 'M')
     b++;  
-   if   (matriz[i][j-1].tipo == 'M')
+   if ((j-1 > 0) && matriz[i][j-1].tipo == 'M')
     b++;  
-   if   (matriz[i][j+1].tipo == 'M')
+   if ((j+1 < y) && matriz[i][j+1].tipo == 'M')
     b++;  
-   if (matriz[i+1][j-1].tipo == 'M')
+   if ((j-1 > 0) && (i+1 < x) && matriz[i+1][j-1].tipo == 'M')
     b++;  
-   if   (matriz[i+1][j].tipo == 'M')
+   if (matriz[i+1][j].tipo == 'M')
     b++;  
-   if (matriz[i+1][j+1].tipo == 'M')
+   if ((j+1 < y) && (i+1 < x) && matriz[i+1][j+1].tipo == 'M')
     b++;  
   
    //C = (char)(((int)'0')+b); // convierte int a char;
