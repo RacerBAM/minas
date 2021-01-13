@@ -64,14 +64,29 @@ void colocarMinas(int filas, int columnas, tipoCasilla **matrix, int NumeroMinas
 	}
 }
 
-int procedimiento(tipoCasilla **matriz, int r, int c) {
+int procedimiento(tipoCasilla **matriz, int r, int c, int di) {
 
  // retorna 0 si toca una Mina y retorna 1 si toca un cuadro sin minas
  // si toca un cuadro sin minas, chequea las casillas adyacentes por minas
  // el numero de minas adyacentes sera el entero "b"
 
- int i = r, j = c, b = 0, k;
+ int i = r, j = c, b = 0, k, x, y;
  char C;
+	
+ if (di == 1) {
+	 x = 8;
+	 y = 8;
+}
+
+ if (di == 2) {
+	 x = 16;
+	 y = 16;
+ }
+	
+ if (di == 3) {
+	 x = 16;
+	 y = 30;
+ }
 
  if (matriz[i][j].tipo == 'M') {
    k = 0;
@@ -80,21 +95,21 @@ int procedimiento(tipoCasilla **matriz, int r, int c) {
 
  else {
 
-   if (matriz[i-1][j-1].tipo == 'M')
+   if ((i-1 > 0) && (j-1 > 0) && matriz[i-1][j-1].tipo == 'M')
    	b++;  
-   if   (matriz[i-1][j].tipo == 'M')
+   if ((i-1 > 0) && matriz[i-1][j].tipo == 'M')
     b++;  
-   if (matriz[i-1][j+1].tipo == 'M')
+   if ((i-1 > 0) && (j+1 < y) && matriz[i-1][j+1].tipo == 'M')
     b++;  
-   if   (matriz[i][j-1].tipo == 'M')
+   if ((j-1 > 0) && matriz[i][j-1].tipo == 'M')
     b++;  
-   if   (matriz[i][j+1].tipo == 'M')
+   if ((j+1 < y) && matriz[i][j+1].tipo == 'M')
     b++;  
-   if (matriz[i+1][j-1].tipo == 'M')
+   if ((j-1 > 0) && (i+1 < x) && matriz[i+1][j-1].tipo == 'M')
     b++;  
-   if   (matriz[i+1][j].tipo == 'M')
+   if (matriz[i+1][j].tipo == 'M')
     b++;  
-   if (matriz[i+1][j+1].tipo == 'M')
+   if ((j+1 < y) && (i+1 < x) && matriz[i+1][j+1].tipo == 'M')
     b++;  
   
    //C = (char)(((int)'0')+b); // convierte int a char;
@@ -155,7 +170,7 @@ int victoria(tipoCasilla **matrx, int difficult) {
 
 int main() {
 
-	int dificultad, x, y, prueba, prueba2;
+	int dificultad, x, y, prueba, prueba2, q, w;
 
 	printf("\nBienvenido a 'Minesweeper' en C. \n \n");
 	printf("Reglas del Juego: \n");
@@ -177,17 +192,23 @@ int main() {
 		print_matrix(8, 8, red, 1);
 		printf("Entre la posicion que desea descubrir: ");
 		scanf("%d%d \n", &x, &y);
-		prueba = procedimiento(red, x+1, y+1);
-		if (x == 0 && y == 0)
-			bandera(red, x, y);
+		prueba = procedimiento(red, x+1, y+1, dificultad);
+		if (x == 0 && y == 0) {
+			printf("Entre la posicion que desea marcar: ");
+			scanf("%d%d \n", &q, &w);
+			bandera(red, q+1, w+1);
+		}
 		while (prueba == 1) {
 			printf("Bien hecho, sigues en el juego.\n");
 			print_matrix(8, 8, red, 1);
 			printf("Entre la posicion que desea descubrir: ");
 			scanf("%d%d \n", &x, &y);
-			prueba2 = procedimiento(red, x+1, y+1);
-			if (x == 0 && y == 0)
-				bandera(red, x, y);
+			prueba2 = procedimiento(red, x+1, y+1, dificultad);
+			if (x == 0 && y == 0) {
+				printf("Entre la posicion que desea marcar: ");
+				scanf("%d%d \n", &q, &w);
+				bandera(red, q+1, w+1);
+			}
 			if (victoria(red, 1) == 1) {
 				printf("Felicitaciones! Ganaste el juego!");
 				prueba = 2;
@@ -209,17 +230,23 @@ int main() {
 		colocarMinas(16, 16, red, 40);
 		print_matrix(16, 16, red, 2);
 		scanf("%d%d \n", &x, &y);
-		prueba = procedimiento(red, x+1, y+1);
-		if (x == 0 && y == 0)
-			bandera(red, x, y);
+		prueba = procedimiento(red, x+1, y+1, dificultad);
+		if (x == 0 && y == 0) {
+			printf("Entre la posicion que desea marcar: ");
+			scanf("%d%d \n", &q, &w);
+			bandera(red, q+1, w+1);
+		}
 		while (prueba == 1) {
 			printf("Bien hecho, sigues en el juego.\n");
 			print_matrix(16, 16, red, 2);
 			printf("Entre la posicion que desea descubrir: ");
 			scanf("%d%d \n", &x, &y);
-			prueba2 = procedimiento(red, x+1, y+1);
-			if (x == 0 && y == 0)
-				bandera(red, x, y);
+			prueba2 = procedimiento(red, x+1, y+1, dificultad);
+			if (x == 0 && y == 0) {
+				printf("Entre la posicion que desea marcar: ");
+				scanf("%d%d \n", &q, &w);
+				bandera(red, q+1, w+1);
+			}
 			if (victoria(red, 2) == 1) {
 				printf("Felicitaciones! Ganaste el juego!");
 				prueba = 2;
@@ -241,17 +268,23 @@ int main() {
 		colocarMinas(16, 30, red, 99);
 		print_matrix(16, 30, red, 3);
 		scanf("%d%d \n", &x, &y);
-		prueba = procedimiento(red, x+1, y+1);
-		if (x == 0 && y == 0)
-			bandera(red, x, y);
+		prueba = procedimiento(red, x+1, y+1, dificultad);
+		if (x == 0 && y == 0) {
+			printf("Entre la posicion que desea marcar: ");
+			scanf("%d%d \n", &q, &w);
+			bandera(red, q+1, w+1);
+		}
 		while (prueba == 1) {
 			printf("Bien hecho, sigues en el juego.\n");
 			print_matrix(16, 30, red, 3);
 			printf("Entre la posicion que desea descubrir: ");
 			scanf("%d%d \n", &x, &y);
-			prueba2 = procedimiento(red, x+1, y+1);
-			if (x == 0 && y == 0)
-				bandera(red, x, y);
+			prueba2 = procedimiento(red, x+1, y+1, dificultad);
+			if (x == 0 && y == 0) {
+				printf("Entre la posicion que desea marcar: ");
+				scanf("%d%d \n", &q, &w);
+				bandera(red, q+1, w+1);
+			}
 			if (victoria(red, 3) == 1) {
 				printf("Felicitaciones! Ganaste el juego!");
 				prueba = 2;
